@@ -1,0 +1,36 @@
+version: "3"
+services:
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    restart: always
+    volumes:
+      - $HOME/data/:/var/lib/rabbitmq
+    ports:
+      - 5672:5672
+      - 15672:15672
+    hostname: localhost
+    network_mode: host
+
+  consumer-service:
+    build: ./rabbitmq consumer/.
+    container_name: rabbitmq-consumer
+    ports:
+      - 8082:8082
+    depends_on:
+      - rabbitmq
+    restart: always
+    hostname: localhost
+    network_mode: host
+
+  producer-service:
+    build: ./rabbitmq producer/.
+    container_name: rabbitmq-producer
+    ports:
+      - 8081:8081
+    depends_on:
+      - rabbitmq
+    restart: always
+    hostname: localhost
+    network_mode: host
+
